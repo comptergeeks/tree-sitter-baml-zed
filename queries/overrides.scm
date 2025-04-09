@@ -1,15 +1,22 @@
-; Apply string scope to string literals
+;; String scopes
 [
   (quoted_string_literal)
   (raw_string_literal)
 ] @string
 
-; Apply comment scope to comments
+;; Comment scopes (inclusive to include the entire comment)
 [
   (comment)
   (doc_comment)
   (block_comment)
 ] @comment.inclusive
 
-; Special handling for jinja expressions
+;; Code blocks
+[
+  (expr_block)
+  (value_expression_block)
+  (type_expression_block)
+] @code_block
+
+;; Jinja expressions
 (jinja_expression) @jinja

@@ -1,28 +1,38 @@
-; Blocks that should be indented
-(type_expression_block
-  "{" @indent
-  "}" @outdent) @indent
-
+;; Block indentation
 (value_expression_block
   "{" @indent
-  "}" @outdent) @indent
+  "}" @end) @indent
+
+(type_expression_block
+  "{" @indent
+  "}" @end) @indent
 
 (expr_block
   "{" @indent
-  "}" @outdent) @indent
+  "}" @end) @indent
 
 (type_builder_block
   "{" @indent
-  "}" @outdent) @indent
+  "}" @end) @indent
 
+;; Expression indentation
 (map_expression
   "{" @indent
-  "}" @outdent) @indent
+  "}" @end) @indent
 
 (array_expression
   "[" @indent
-  "]" @outdent) @indent
+  "]" @end) @indent
 
 (class_constructor
   "{" @indent
-  "}" @outdent) @indent
+  "}" @end) @indent
+
+;; Argument lists
+(arguments_list
+  "(" @indent
+  ")" @end)
+
+(named_argument_list
+  "(" @indent
+  ")" @end)

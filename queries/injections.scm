@@ -1,10 +1,23 @@
-; Inject Jinja expressions
-(jinja_expression
-  (_jinja_body) @injection.content
-  (#set! injection.language "jinja"))
+;; Jinja expressions
+((jinja_expression) @injection.content
+ (#set! injection.language "jinja"))
 
-; Handle raw string literals that might contain injected code
-; This is a basic pattern - adjust based on your specific needs
-(raw_string_literal) @injection.content
-(#match? @injection.content "^#*\"(html|css|js|sql|python|json):")
-(#set! injection.language (string-replace @injection.content "^#*\"([a-z]+):.*" "\\1"))
+;; Raw string templates with language markers
+((raw_string_literal) @injection.content
+ (#match? @injection.content "^(?:[a-zA-Z][a-zA-Z0-9_-]*)?#*\".*?\"#*$")
+ (#set! injection.language "string"))
+
+;; Possible SQL injections in strings marked with 'sql' prefix
+((raw_string_literal) @injection.content
+ (#match? @injection.content "^sql#*\".*?\"#*$")
+ (#set! injection.language "sql"))
+
+;; Possible JSON injections in strings marked with 'json' prefix
+((raw_string_literal) @injection.content
+ (#match? @injection.content "^json#*\".*?\"#*$")
+ (#set! injection.language "json"))
+
+;; Possible HTML/XML injections in strings marked with 'html' or 'xml' prefix
+((raw_string_literal) @injection.content
+ (#match? @injection.content "^(html|xml)#*\".*?\"#*$")
+ (#set! injection.language "html"))

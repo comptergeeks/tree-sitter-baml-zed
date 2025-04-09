@@ -1,24 +1,19 @@
-; Functions
-(expr_fn) @function.around
-(expr_fn (expr_block
-  "{"
-  (._)* @function.inside
-  "}"))
+;; Function objects
+(expr_fn
+  body: (expr_block) @function.inside) @function.around
 
-(value_expression_block) @function.around
 (value_expression_block
-  _BLOCK_OPEN: "{"
-  (._)* @function.inside
-  _BLOCK_CLOSE: "}")
+  keyword: (value_expression_keyword)
+  body: (_) @function.inside) @function.around
 
-; Classes/Types
-(type_expression_block) @class.around
+;; Class/type objects
 (type_expression_block
-  _BLOCK_OPEN: "{"
-  (._)* @class.inside
-  _BLOCK_CLOSE: "}")
+  body: (_) @class.inside) @class.around
 
-; Comments
+;; Comment objects
 (comment) @comment.around
 (doc_comment) @comment.around
 (block_comment) @comment.around
+
+;; Join multiple consecutive comments as one text object
+([(comment) (doc_comment)]+ @comment.around)

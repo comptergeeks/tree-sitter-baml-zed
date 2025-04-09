@@ -1,40 +1,62 @@
-; Keywords
+;; Keywords
 [
-  "let"
-  "fn"
-  "type"
+  "dynamic"
   "function"
-  "template_string"
-  "string_template"
   "test"
-  "type_builder"
   "client"
-  "class"
-  "client<llm>"
   "generator"
   "retry_policy"
-  "dynamic"
+  "type_builder"
+  "template_string"
+  "string_template"
+  "class"
+  "enum"
+  "type"
   "map"
+  "fn"
+  "let"
 ] @keyword
 
-; Type-related keywords
-(type_alias "type" @keyword)
+;; Identifier paths
+(path_identifier) @variable
+(namespaced_identifier) @namespace
 
-; Function-related
-(expr_fn "fn" @keyword)
-(lambda "=>" @operator)
+;; String literals
+(quoted_string_literal) @string
+(raw_string_literal) @string
+(unquoted_string_literal) @string.special
 
-; Operators
+;; Numeric literals
+(numeric_literal) @number
+
+;; Comments
+(comment) @comment
+(doc_comment) @comment.doc
+(block_comment) @comment
+
+;; Types
+(field_type (identifier) @type)
+(array_notation) @type
+(map_type) @type
+(literal_type) @type
+(field_type_with_attr) @type
+
+;; Attributes
+(field_attribute) @attribute
+(block_attribute) @attribute
+
+;; Operators
 [
-  "="
-  "->"
-  "=>"
   "|"
+  "="
   "?"
-  ".."
+  "=>"
+  "->"
+  "::"
+  "."
 ] @operator
 
-; Punctuation
+;; Punctuation
 [
   "("
   ")"
@@ -42,51 +64,40 @@
   "]"
   "{"
   "}"
-  "{{"
-  "}}"
+  "<"
+  ">"
   ","
   ";"
   ":"
-  "::"
-  "."
-] @punctuation.delimiter
+  "@"
+  "@@"
+] @punctuation.bracket
 
-; Types
-(field_type (identifier) @type)
-(base_type (identifier) @type)
-(type_expression_block name: (identifier) @type)
-(class_constructor class_name: (identifier) @type)
+;; Expression blocks
+(expr_block) @expression
 
-; Functions
-(fn_app function_name: (identifier) @function)
+;; Functions
 (expr_fn name: (identifier) @function)
 (value_expression_block
   keyword: (value_expression_keyword) @keyword
   name: (identifier) @function)
 
-; Variables
-(let_expr name: (identifier) @variable)
-(value_expression name: (identifier) @variable)
-(named_argument name: (identifier) @variable)
-(class_field_value_pair field_name: (identifier) @variable)
+;; Properties and fields
+(value_expression name: (identifier) @property)
+(type_expression name: (identifier) @property)
+(class_field_value_pair field_name: (identifier) @property)
 
-; Attributes
-(block_attribute "@@" @attribute (identifier) @attribute)
-(field_attribute "@" @attribute (identifier) @attribute)
+;; Template declarations
+(template_declaration name: (identifier) @function)
 
-; Strings
-(quoted_string_literal) @string
-(raw_string_literal) @string
-(unquoted_string_literal) @string
+;; Function applications
+(fn_app function_name: (identifier) @function)
 
-; Numbers
-(numeric_literal) @number
+;; Named arguments
+(named_argument name: (identifier) @variable.parameter)
 
-; Comments
-(comment) @comment
-(doc_comment) @comment.doc
-(block_comment) @comment
-(trailing_comment) @comment
+;; Map expressions
+(map_key) @property
 
-; Jinja expressions
+;; Jinja expressions
 (jinja_expression) @embedded

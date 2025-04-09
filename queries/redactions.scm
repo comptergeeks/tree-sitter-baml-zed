@@ -1,22 +1,16 @@
-; Redact sensitive data in strings
+;; Redact sensitive string content
 (quoted_string_literal) @redact
 (raw_string_literal) @redact
 
-; Redact numeric values that might be sensitive
+;; Redact sensitive numeric values
 (numeric_literal) @redact
 
-; Redact values in maps that might contain sensitive info
+;; Redact potentially sensitive values in maps
 (map_entry
-  key: (map_key)
+  key: (_)
   value: (_) @redact)
 
-; Redact class constructor fields that might be sensitive
-(class_field_value_pair
-  field_name: (identifier)
+;; Redact values in key-value expressions
+(value_expression
+  name: (_)
   value: (_) @redact)
-
-; Optionally redact specific fields that are likely to contain sensitive data
-(class_field_value_pair
-  field_name: (identifier) @_name
-  value: (_) @redact
-  (#match? @_name "(password|secret|key|token|credential)"))
