@@ -1,41 +1,61 @@
 ;; Keywords
-((identifier) @keyword
- (#match? @keyword "^(function|test|client|generator|retry_policy|type_builder|class|enum|type|map|fn|let|dynamic)$"))
+(["function" "class" "client" "prompt"] @keyword)
 
-;; Identifiers
-(identifier) @variable
+;; Type declarations
+(["string" "int" "float" "bool" "array" "map" "literal"] @type)
 
-;; String literals
-(quoted_string_literal) @string
-(raw_string_literal) @string
-(unquoted_string_literal) @string
+;; Operators
+(["=>" "->" "|"] @operator)
 
-;; Numeric literals
-(numeric_literal) @number
+;; Constants
+(["true" "false"] @constant.builtin)
+
+;; Special variables
+((identifier) @variable.builtin
+ (#match? @variable.builtin "^(ctx|_)\\.[a-zA-Z_]+$"))
+
+;; Function declarations
+(function_declaration
+  name: (identifier) @function)
+
+;; Class declarations
+(class_declaration
+  name: (identifier) @type)
+
+;; Parameters
+(parameter
+  name: (identifier) @variable.parameter
+  type: (type_reference) @type)
+
+;; Properties
+(property_declaration
+  name: (identifier) @property
+  type: (type_reference) @type)
+
+;; Template variables and expressions
+(template_expression) @variable.special
+
+;; Directives
+(template_directive) @keyword.control
 
 ;; Comments
 (comment) @comment
-(doc_comment) @comment.doc
-(block_comment) @comment
+(docstring) @comment.documentation
 
-;; Types
-(field_type) @type
+;; Strings
+(quoted_string) @string
+(unquoted_string) @string
+(block_string) @string
+(template_string) @string
 
-;; Functions
-(expr_fn name: (identifier) @function)
-(value_expression_block name: (identifier) @function)
+;; Block string delimiters
+["#\"" "\"#"] @punctuation.special
 
-;; Properties
-(value_expression name: (identifier) @property)
-(type_expression name: (identifier) @property)
-
-;; Parameters
-(named_argument name: (identifier) @variable.parameter)
+;; Numbers
+(number) @number
 
 ;; Punctuation
-["(" ")" "[" "]" "{" "}" "<" ">" "," ";" ":"] @punctuation.bracket
-["|" "=" "?" "=>" "->"] @operator
+["(" ")" "[" "]" "{" "}" "<" ">" "," ":"] @punctuation.delimiter
 
-;; Attributes
-(field_attribute) @attribute
-(block_attribute) @attribute
+;; Errors
+(ERROR) @error
